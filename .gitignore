@@ -4,3 +4,4 @@ todo.md
 __pycache__/
 tmp.txt
 tmp.tex
+.DS_store
