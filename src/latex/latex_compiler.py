@@ -10,7 +10,6 @@ def latex_escaped_string(string):
         string = string.replace(pattern, replacement)
 
     return string
-    print(f'Esc as {string}')
 
 def write_element(file_object, element):
     # Escape all characters for each entry after the element type so they aren't compiled wrong - e.g. % starting a comment
@@ -18,10 +17,14 @@ def write_element(file_object, element):
     file_object.write(f'\\{element["type"]}'+'{'+'}{'.join(escaped_values)+'}\n')
 
 def complile_to_latex(data: list[dict]):
+    """
+    Takes a list of elements (point, visits etc) and compiles them into correct latex code which is
+    written to latex/tmp.tex
+    """
     # Create a copy of the template to write to in order to create the final latex
-    shutil.copy('src/template.tex', 'src/tmp.tex')
+    shutil.copy('src/latex/template.tex', 'src/latex/tmp.tex')
 
-    with open('src/tmp.tex', 'a') as file:
+    with open('src/latex/tmp.tex', 'a') as file:
         # Add all trials, places and visits in order: visits, trials, places
         file.write('\\begin{offers}\n')
 

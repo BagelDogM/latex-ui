@@ -28,4 +28,11 @@ function postData() {
   xhr.setRequestHeader("Content-Type", "application/json");
   var data = JSON.stringify(final_json);
   xhr.send(data);
+
+  // Finally, add the "download PDF" button so that the user can download the result
+  // But only add if the button doesn't already exist.
+  if (document.getElementById("download") == null) {
+    code = `<a target="_blank" id="download" href="/download" class="inline-block float-right text-sm p-1.5 text-black font-medium">Download PDF</a>`
+    document.getElementById("navbar").insertAdjacentHTML("beforeend", code)
+  }
 }

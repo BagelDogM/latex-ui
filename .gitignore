@@ -2,6 +2,8 @@ output.css
 env/
 todo.md
 __pycache__/
-tmp.txt
-tmp.tex
 .DS_store
+*.aux
+*.log
+*.pdf
+tmp.tex

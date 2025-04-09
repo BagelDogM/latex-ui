@@ -1,0 +1,67 @@
+\usepackage{extarrows,pgffor}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+
+% General functions
+\newcommand{\conc}[1]{\hspace*{0pt}\hfill\textbf{#1}}
+\newcommand{\point}[1]{\item #1 \newline}
+\newcommand{\majority}[1]{\conc{Majority vote in favour #1}}
+\newcommand{\majoritya}[1]{\conc{Majority vote against #1}}
+\newcommand{\noobjections}[1]{\conc{No objections #1}}
+\newcommand{\intitle}[1]{\textbf{#1 ---}}
+\newcommand{\inpoint}[1]{\item \intitle{#1}} % AKA an aob
+
+
+% Trail and place offerings and visit requests
+% If you need to reconstruct, the syntax would be    \item \intitle{Name( yg)} details \conc{conclusion} (or ender like \majority)
+\newenvironment{offers}[1]{\item Offering places, trials and visits \begin{enumerate}#1}{\end{enumerate}}
+\newcommand{\trialoffer}[2]{\majority{of offering #1 a trial week in #2}}
+\newcommand{\placeoffer}[2]{\majority{of offering #1 a place at Sands in #2}}
+\newcommand{\visitoffer}[1]{\majority{of offering #1 a visit to Sands}}
+\newcommand{\trial}[3]{\item \intitle{#1 (#2)} #3 \newline \trialoffer{#1}{#2}}
+\newcommand{\place}[3]{\item \intitle{#1 (#2)} #3 \newline \placeoffer{#1}{#2}}
+\newcommand{\visit}[2]{\item \intitle{#1} #2 \newline \visitoffer{#1}}
+
+% Council feedback
+\newenvironment{council}[1]{\item Council feedback \begin{enumerate} #1}{\end{enumerate}}
+
+\setlength\fboxsep{0.3cm}
+
+\newcommand{\titlebox}{
+\begin{center}
+\noindent\fbox{\parbox{11.5cm}{
+\begin{center}
+    \textbf{Meeting Minutes} \\
+    \minsdate \\
+    Written by \minsauthor \\
+    \vspace{0.3cm}
+    \noindent\makebox[\linewidth]{\rule{12.13cm}{0.4pt}}
+
+    \vspace{0.25cm}
+    \textbf{Attendance}
+    \vspace{0.25cm}
+
+    \setlength\fboxsep{0.2cm}
+    \foreach \name\num in \minsattendance {
+        \fbox{\name: \num}
+    }
+    \vspace{0.25cm}
+
+    \noindent\makebox[\linewidth]{\rule{12.13cm}{0.4pt}}
+
+    \vspace{0.25cm}
+    \textbf{Activities}
+    \vspace{0.25cm}
+
+     The following are any opportunities or activities presented in the meeting that you may wish to sign up for. Their respective meeting points are listed in brackets next to their names.
+    \end{center}
+    \textbf{Activity \hspace{\stretch{1}}Talk to...}
+
+    \foreach \point\name\person in \minsactivities {
+    (\point) \name \hspace{\stretch{1}} \person \\
+    }
+    \vspace{-0.25cm}
+}}\end{center}
+\vspace{1cm}
+}
+
+\endinput
