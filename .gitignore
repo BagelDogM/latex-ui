@@ -1,2 +1,6 @@
 output.css
 env/
+todo.md
+__pycache__/
+tmp.txt
+tmp.tex
