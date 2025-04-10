@@ -4,6 +4,9 @@ async function loadHTML(path) {
   tmp = window.scrollY;
   document.getElementById("container").insertAdjacentHTML("beforeend", (await (await fetch(path)).text()).toString());
   window.scroll(0, tmp);
+
+  // Additionally, stop the "Create PDF" button from being greyed out
+  document.getElementById("create").removeAttribute("style");
 }
 
 // Get data from all form elements and send to backend using a POST request
@@ -21,20 +24,31 @@ function postData() {
     final_json.push({ 'type': element.id, 'values': values });
   }
 
-  if (final_json.length !== 0) {
+  if (final_json.length !== 0) { // Only run if JSON exists`
     // Send data to backend via POST
     var xhr = new XMLHttpRequest();
-    var url = "data";
-    xhr.open("POST", url, true);
+    xhr.open("POST", "data", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     var data = JSON.stringify(final_json);
     xhr.send(data);
 
-    // Finally, add the "download PDF" button so that the user can download the result
-    // But only add if the button doesn't already exist.
-    if (document.getElementById("download") == null) {
-      code = `<a target="_blank" id="download" href="/download" class="inline-block float-right text-sm p-1.5 text-black font-medium">Download PDF</a>`
-      document.getElementById("navbar").insertAdjacentHTML("beforeend", code)
+    previousContent = document.getElementById("create").textContent; // Save previous content in order to reset
+    document.getElementById("create").textContent = "Loading...";
+
+    xhr.onload = () => {
+      console.log(xhr.status)
+      // Finally, add the "download PDF" button so that the user can download the result
+      // But only add if the button doesn't already exist, and the XHR returned 201 (so a document has been created)
+      if (document.getElementById("download") == null && xhr.status == 201) {
+        code = `<a target="_blank" id="download" href="/download" class="inline-block float-right text-sm p-1.5 text-black font-medium">Download PDF</a>`
+        document.getElementById("navbar").insertAdjacentHTML("beforeend", code)
+      }
+
+      document.getElementById("create").textContent = previousContent; // reset content
     }
   }
+}
+
+function removeElement() {
+  // Remember to grey out "Create PDF" if all elements are gone.
 }

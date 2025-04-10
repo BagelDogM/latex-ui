@@ -16,7 +16,8 @@ bg-linear-to-r from-cyan-50 to-blue-50" id="navbar">
         <a href="#" class="text-sm p-1.5 text-gray-700 font-medium" onclick="loadHTML('static/elements/place.html')">Place</a>
 
         <a href="#" class="inline-block float-right text-sm p-1.5 text-gray/950 font-light">Settings</a>
-        <a href="#" class="inline-block float-right text-sm p-1.5 text-black font-medium" onclick="postData()">Create PDF</a>
+        <a href="#" id="create" class="inline-block float-right text-sm p-1.5 text-black font-medium" onclick="postData()"
+            style="pointer-events: none;color:grey;">Create PDF</a> <!-- Classic css styling exists so that it can easily be stripped using JS -->
     </nav>
     <div id="container" class="m-0 p-0">
         <!-- Container for all elements -->
