@@ -26,16 +26,19 @@ def complile_to_latex(data: list[dict]):
 
     with open('src/latex/tmp.tex', 'a') as file:
         # Add all trials, places and visits in order: visits, trials, places
-        file.write('\\begin{offers}\n')
-
         types = ['visit', 'trial', 'place'] # Also the correct ordering
         relevant_elements = [e for e in data if e['type'] in types]
-        relevant_elements.sort(key=lambda e: types.index(e['type'])) # Sort in the order the 'types' list is in.
 
-        for element in relevant_elements:
-            write_element(file, element)
+        print(f'{relevant_elements=}')
+        if relevant_elements != []: # If there are any visits, trials or places
+            file.write('\\begin{offers}\n')
 
-        file.write('\\end{offers}\n')
+            relevant_elements.sort(key=lambda e: types.index(e['type'])) # Sort in the order the 'types' list is in.
+
+            for element in relevant_elements:
+                write_element(file, element)
+
+            file.write('\\end{offers}\n')
 
         # Add all other points
         relevant_elements = [e for e in data if e['type'] == 'point']
