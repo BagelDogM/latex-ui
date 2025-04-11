@@ -19,13 +19,13 @@ def data():
     # setting the output directory to src/latex so that the log files do not clog the filesystem.
     p = subprocess.Popen(shlex.split('pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/latex src/latex/tmp.tex'))
 
-    while p.poll() is None: # Wait until the process has finished
+    while (code:=p.poll()) is None: # Wait until the process has finished
         pass
 
     if p.poll() == 0: # The program exited succesfully
-        return Response('', status=201) # Return that the resource was created.
+        return Response('Resouce created.', status=201) # Return that the resource was created.
     else:
-        return Response('', status=400) # Otherwise, return that it failed (e.g., the input was blank)
+        return Response(f'PDF creation failed due to pdflatex error. Error code: {code}', status=400) # Otherwise, return that it failed (e.g., the input was blank)
 
 
 # Handles data download, requested by the frontend client.

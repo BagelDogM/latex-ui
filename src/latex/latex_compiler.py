@@ -1,19 +1,23 @@
 import shutil
 
-def latex_escaped_string(string):
+def parse_string(string):
+    # Escape necessary characters and convert single linebreaks to \newline characters.
     escape_characters = {
-        '\\': '\\textbackslash',
+        '\\': '\\textbackslash ',
         '{': '\\{',
         '}': '\\}',
-        '%': '\\%'}
+        '%': '\\%',
+        '\n': '\\newline ' # \n\n will already be used as intended.
+    }
     for pattern, replacement in escape_characters.items():
         string = string.replace(pattern, replacement)
 
+    # Convert
     return string
 
 def write_element(file_object, element):
     # Escape all characters for each entry after the element type so they aren't compiled wrong - e.g. % starting a comment
-    escaped_values = map(latex_escaped_string, element['values'])
+    escaped_values = map(parse_string, element['values'])
     file_object.write(f'\\{element["type"]}'+'{'+'}{'.join(escaped_values)+'}\n')
 
 def complile_to_latex(data: list[dict]):
