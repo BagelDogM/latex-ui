@@ -1,11 +1,13 @@
-### Basic Structure:
-**Stuff that premakes UI**
-UI          Input and interface
-Submission  JavaScript compilation to JSON format
-Backend     Modify JSON as appropriate
-Compilation Compile JSON to LaTeX etc using preamble and defined commands
+# Basic layer structure
+Data flows through these layers sequentially.
+| Layer name | Layer function                                                |
+| ---------- | ------------------------------------------------------------- |
+| UI         | Input and interface creation                                  |
+| Submission | JavaScript compilation to JSON format                         |
+| Backend    | Modify JSON as appropriate                                    |
+| Compilation| Compile JSON to LaTeX etc using preamble and defined commands |
 
-### Details:
+# Details
 ## Configuration file
 This file is read from by all other layers. It stores information for buckets, elements and the entire document. The format is:
 ```json
@@ -30,7 +32,10 @@ This file is read from by all other layers. It stores information for buckets, e
     }
   },
   "document": {
-    "premable-source": <source of preamble document which contains any extra text and the string formatting locations of buckets>
+    "premable-source": <source of preamble document which contains any extra text and the string formatting locations of buckets>,
+    "write-location": <file compilation layer should write to>
+    "compilation-command": <command to compile the file, if necessary (e.g. for LaTeX),
+    "document-source": <source where final document is found, if different from write-location>
   }
 }
 ```
@@ -67,4 +72,4 @@ Each element in the passed JSON will be converted into the appropriate text usin
 ### Buckets
 Each function is prescribed a bucket by the Backenc layer via the "bucket" attribute in the config. The functions are added to their appropriate bucket in the order they are found (so sorting should be done in the backend.) Each bucket also has begin and end text that is added conditionally.
 
-Once each bucket has its content, they are then added to the document itself (path specified in the config.)
+Once each bucket has its content, they are then added to the document itself (write-location in the config.) Then, if `compilation-command` exists, it is run. The compilation layer then ends, prompting the backend to read the file at write-source, or document-source if it exists, and make this available to the frontend via the /download post request.
