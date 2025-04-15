@@ -1,0 +1,12 @@
+{
+"elements": {
+  "point": {
+    "bucket": "-",
+    "fields": {
+      "title": {"type": "short-input"},
+      "body": {"type": "textarea"}
+    },
+    "function": "\\point{$title}{$name}"
+  }
+}
+}
