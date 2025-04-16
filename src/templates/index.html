@@ -10,7 +10,7 @@
     <nav class="navbar" id="navbar">
         <p class="navbar-link navbar-heavy">Add an element:</p>
         {% for element in element_names %}
-        <a href="#" class="navbar-link navbar-regular" onclick="loadHTML('static/elements/{{ element }}.html')">{{ element }}</a>
+        <a href="#" class="navbar-link navbar-regular" onclick="loadHTML('static/elements/{{ element }}.html')">{{ element|capitalize }}</a>
         {% endfor %}
 
         <!-- <a href="#" class="navbar-link navbar-right navbar-light">Settings</a> -->
