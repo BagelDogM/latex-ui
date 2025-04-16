@@ -1,7 +1,9 @@
 import json
 import kdl
+import os
 
 def build_elements():
+    os.makedirs('src/static/elements') # Make elements directory
     # TODO: refactor to use Jinja
     ui_config = kdl.parse(open('cfg/ui_config.kdl').read())
     with open("cfg/config.json") as file:
