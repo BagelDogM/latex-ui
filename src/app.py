@@ -1,10 +1,16 @@
-import subprocess, shlex, os
+import subprocess, shlex, os, json
 from flask import Flask, render_template, request, send_file, Response
 from latex.latex_compiler import complile_to_latex
 
 from backend import assign_element_properties
 from ui import build_elements
 element_names = build_elements()
+
+config = json.load(open("cfg/config.json"))
+# Determine where final document will be location
+document_location = ''
+if config['document']['document-location']: document_location = config['document']['document-location']
+else: document_location = config['document']['write-location']
 
 app = Flask(__name__)
 
@@ -23,7 +29,7 @@ def data():
 
     # Compile the latex that compile_to_latex wrote,
     # setting the output directory to src/latex so that the log files do not clog the filesystem.
-    p = subprocess.Popen(shlex.split('pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/latex src/latex/tmp.tex'))
+    p = subprocess.Popen(shlex.split(config['document']['compilation-command']))
 
     while (code:=p.poll()) is None: # Wait until the process has finished
         pass
@@ -37,8 +43,8 @@ def data():
 # Handles data download, requested by the frontend client.
 @app.route("/download")
 def download():
-    if os.path.exists('src/latex/tmp.pdf'):
-        return send_file('latex/tmp.pdf')
+    if os.path.exists(document_location):
+        return send_file(document_location.replace('src/', ''))
     else:
         return 'No PDF has been compiled yet.'
 

@@ -36,7 +36,7 @@ This file is read from by all other layers. It stores information for buckets, e
     "template-source": <source of preamble document which contains any template text and the string formatting locations of buckets>,
     "write-location": <file compilation layer should write to>
     "compilation-command": <command to compile the file, if necessary (e.g. for LaTeX),
-    "document-source": <source where final document is found, if different from write-location>
+    "document-location": <source where final document is found, if different from write-location>
   }
 }
 ```
@@ -81,4 +81,4 @@ Each element in the passed JSON will be converted into the appropriate text usin
 ### Buckets
 Each function is prescribed a bucket by the Backenc layer via the "bucket" attribute in the config. The functions are added to their appropriate bucket in the order they are found  (so sorting should be done in the backend.) They are joined by `joiner`. Each bucket also has begin and end text that is added conditionally.
 
-Once each bucket has its content, they are then added to the document itself (write-location in the config.) Then, if `compilation-command` exists, it is run. The compilation layer then ends, prompting the backend to read the file at write-source, or document-source if it exists, and make this available to the frontend via the /download post request.
+Once each bucket has its content, they are then added to the document itself (write-location in the config.) Then, if `compilation-command` exists, it is run. The compilation layer then ends, prompting the backend to read the file at write-source, or document-location if it exists, and make this available to the frontend via the /download post request.
