@@ -2,6 +2,7 @@ import subprocess, shlex, os
 from flask import Flask, render_template, request, send_file, Response
 from latex.latex_compiler import complile_to_latex
 
+from backend import assign_element_properties
 from ui import build_elements
 element_names = build_elements()
 
@@ -16,6 +17,8 @@ def main():
 def data():
     json = request.get_json()
     print(f'Received JSON: {json}')
+    json = assign_element_properties(json)
+    print(f'Edited JSON to: {json}')
     complile_to_latex(json)
 
     # Compile the latex that compile_to_latex wrote,
