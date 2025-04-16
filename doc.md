@@ -21,7 +21,7 @@ This file is read from by all other layers. It stores information for buckets, e
           "options": <for dropdowns> ["a", "b", ...]
         }
       },
-      "function": <this is what the field will be compiled to. Uses $<fieldname> for string replacement> "\latexfunc{$name}{$content}"
+      "compile-to": <this is what the field will be compiled to. Uses $<fieldname> for string replacement> "\latexfunc{$name}{$content}"
     }
   },
   "buckets": {
@@ -70,13 +70,13 @@ This layer handles all the logic of the program. It is responsible for adding th
   "type": etc
   ...
   "bucket": <appropriate bucket, from config>,
-  "function": <appropriate function, from config>
+  "compile-to": <appropriate text, from config>
 }
 ```
 
 ## Compilation layer
-### Functions
-Each element in the passed JSON will be converted into the appropriate text using the `function` attribute. This attribute uses "$<fieldname>" syntax for string replacement. Then the functions are added to the appropriate buckets.
+### Functions (compile-to)
+Each element in the passed JSON will be converted into the appropriate text using the `compile-to` attribute. This attribute uses Jinja2 for string replacement. Then the functions are added to the appropriate buckets.
 
 ### Buckets
 Each function is prescribed a bucket by the Backenc layer via the "bucket" attribute in the config. The functions are added to their appropriate bucket in the order they are found  (so sorting should be done in the backend.) They are joined by `joiner`. Each bucket also has begin and end text that is added conditionally.

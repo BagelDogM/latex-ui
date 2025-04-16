@@ -29,7 +29,7 @@ def data():
     complile(json) # Invoke compilation layer
 
     # Compile the code that the compile() function wrote,
-    if (ccom := config['document'].get('compilation.command')):
+    if (ccom := config['document'].get('compilation-command')):
         p = subprocess.Popen(shlex.split(ccom))
 
         while (code:=p.poll()) is None: # Wait until the process has finished
@@ -46,7 +46,7 @@ def data():
 @app.route("/download")
 def download():
     if os.path.exists(document_location):
-        return send_file(document_location.replace('src/', '')) # Remove src because this is in a different context.
+        return send_file(document_location.replace('src/', '')) # Remove src because this is in a different context. TODO: make this better
     else:
         return 'No document has been compiled yet.'
 

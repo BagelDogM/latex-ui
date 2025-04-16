@@ -6,16 +6,16 @@
         "title": {"type": "short-input"},
         "body": {"type": "textarea"}
       },
-      "function": "\\point{$title}{$body}"
+      "compile-to": "\\point{[[ title ]]}{[[ body ]]}"
     },
     "place": {
       "bucket": "offers",
       "fields": {
         "title": {"type": "short-input"},
-        "year-group": {"type": "short-input"},
+        "year": {"type": "short-input"},
         "body": {"type": "textarea"}
       },
-      "function": "\\place{$title}{$year-group}{$body}"
+      "compile-to": "\\place{[[ title ]]}{[[ year ]]}{[[ body ]]}"
     }
   },
   "buckets": {
@@ -37,5 +37,11 @@
     "write-location": "src/compile/tmp.tex",
     "compilation-command": "pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/compile src/compile/tmp.tex",
     "document-location": "src/compile/tmp.pdf"
+  },
+  "jinja": {
+    "block_start_string": "{%",
+    "block_end_string": "%}",
+    "variable_start_string": "[[",
+    "variable_end_string": "]]"
   }
 }
