@@ -7,5 +7,5 @@ __pycache__/
 *.pdf
 tmp.tex
 null
-elements/*
-!elements
+src/static/elements/*
+!src/static/elements
