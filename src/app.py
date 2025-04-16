@@ -1,6 +1,6 @@
 import subprocess, shlex, os, json
 from flask import Flask, render_template, request, send_file, Response
-from latex.latex_compiler import complile_to_latex
+from compile.compiler import complile
 
 from backend import assign_element_properties
 from ui import build_elements

@@ -1,4 +1,3 @@
-import shutil
 import json
 
 def parse_string(string):
@@ -21,7 +20,7 @@ def write_element(file_object, element):
     escaped_values = map(parse_string, element['values'])
     file_object.write(f'\\{element["type"]}'+'{'+'}{'.join(escaped_values)+'}\n')
 
-def complile_to_latex(data: list[dict]):
+def complile(data: list[dict]):
     """
     Takes a list of elements (point, visits etc) and compiles them into correct latex code which is
     written to latex/tmp.tex

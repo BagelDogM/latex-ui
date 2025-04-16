@@ -8,4 +8,3 @@ __pycache__/
 tmp.tex
 null
 src/static/elements/*
-!src/static/elements
