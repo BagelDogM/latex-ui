@@ -12,9 +12,9 @@ function parseInputToJSON() {
 
   for (var i = 0; i < form_elements.length; i++) {
     element = form_elements[i];
-    values = [];
+    values = {};
     for (var i2 = 0; i2 < element.length; i2++) {
-      values.push(element[i2].value);
+      values[element[i2].id] = element[i2].value;
     }
 
     final_json.push({ 'type': element.getAttribute("data-eltype"), 'values': values });
@@ -35,7 +35,8 @@ function prevalidateJSON(json) {
     // If the JSON is not blank, check if all the fields are blank.
     for (i = 0; i < json.length; i++) {
       values = json[i]['values']
-      if (!(values.every(v => v == ''))) { // If all fields aren't blank
+      console.log(values)
+      if (!(Object.values(values).every(v => v == ''))) { // If all fields aren't blank
         valid = true;
       }
     }
