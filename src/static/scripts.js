@@ -1,10 +1,8 @@
 current_id = 1; // ID for newly added elements
 
-create_disabled_style = `pointer-events: none;color:grey;`;
-
 // Functions to remove or add styling that greys out and disables the "Create PDF" button
-function disableCreateButton() { document.getElementById("create").setAttribute("style", create_disabled_style); }
-function enableCreateButton() { document.getElementById("create").removeAttribute("style");  }
+function disableCreateButton() { document.getElementById("create").classList.add("disabled"); }
+function enableCreateButton()  { document.getElementById("create").classList.remove("disabled");  }
 
 function parseInputToJSON() {
   // Parses the current input on the page into a JSON string that can be passed to the backend or validated by the frontend.
@@ -14,11 +12,11 @@ function parseInputToJSON() {
 
   for (var i = 0; i < form_elements.length; i++) {
     element = form_elements[i];
-    values = [];
+    values = {};
     for (var i2 = 0; i2 < element.length; i2++) {
-      values.push(element[i2].value);
+      values[element[i2].id] = element[i2].value;
     }
-    console.log(element.className);
+
     final_json.push({ 'type': element.getAttribute("data-eltype"), 'values': values });
   }
 
@@ -37,7 +35,8 @@ function prevalidateJSON(json) {
     // If the JSON is not blank, check if all the fields are blank.
     for (i = 0; i < json.length; i++) {
       values = json[i]['values']
-      if (!(values.every(v => v == ''))) { // If all fields aren't blank
+      console.log(values)
+      if (!(Object.values(values).every(v => v == ''))) { // If all fields aren't blank
         valid = true;
       }
     }
@@ -66,9 +65,8 @@ function postData() {
     xhr.onload = () => {
       // Finally, add the "download PDF" button so that the user can download the result
       // But only add if the button doesn't already exist, and the XHR returned 201 (so a document has been created)
-      if (document.getElementById("download") == null && xhr.status == 201) {
-        code = `<a target="_blank" id="download" href="/download" class="inline-block float-right text-sm p-1.5 text-black font-medium">Download PDF</a>`
-        document.getElementById("navbar").insertAdjacentHTML("beforeend", code)
+      if (xhr.status == 201) {
+        document.getElementById("download").classList.remove("hidden");
       }
       else if (xhr.status !== 201) {
         alert("Something went wrong. Please check all fields are filled and try again.");

@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="{{url_for('static', filename='output.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='styles.css')}}" rel="stylesheet">
   <script src="{{url_for('static', filename='scripts.js')}}"></script>
 </head>
 <body class="bg-white">
-    <nav class="m-2 p-2 rounded-md shadow-lg bg-white/30 ring-1 ring-black/5 w-3/4 sticky top-1.5
-bg-linear-to-r from-cyan-50 to-blue-50" id="navbar">
-        <p class="inline-block text-sm p-1.5 text-black font-medium">Add an element:</p>
-        <a href="#" class="text-sm p-1.5 text-gray-700 font-medium" onclick="loadHTML('static/elements/point.html')">Point</a>
-        <a href="#" class="text-sm p-1.5 text-gray-700 font-medium" onclick="loadHTML('static/elements/visit.html')">Visit</a>
-        <a href="#" class="text-sm p-1.5 text-gray-700 font-medium" onclick="loadHTML('static/elements/trial.html')">Trial</a>
-        <a href="#" class="text-sm p-1.5 text-gray-700 font-medium" onclick="loadHTML('static/elements/place.html')">Place</a>
+    <nav class="navbar" id="navbar">
+        <p class="navbar-link navbar-heavy">Add an element:</p>
+        {% for element in element_names %}
+        <a href="#" class="navbar-link navbar-regular" onclick="loadHTML('static/elements/{{ element }}.html')">{{ element }}</a>
+        {% endfor %}
 
-        <a href="#" class="inline-block float-right text-sm p-1.5 text-gray/950 font-light">Settings</a>
-        <a href="#" id="create" class="inline-block float-right text-sm p-1.5 text-black font-medium" onclick="postData()"
-            style="pointer-events: none;color:grey;">Create PDF</a> <!-- Classic css styling exists so that it can easily be stripped using JS -->
+        <!-- <a href="#" class="navbar-link navbar-right navbar-light">Settings</a> -->
+        <a href="#" class="navbar-link navbar-right navbar-heavy disabled" onclick="postData()" id="create">Create PDF</a>
+        <a href="/download" class="navbar-link navbar-right navbar-heavy hidden" target="_blank" id="download">Download PDF</a>
     </nav>
     <div id="container" class="m-0 p-0">
         <!-- Container for all elements -->

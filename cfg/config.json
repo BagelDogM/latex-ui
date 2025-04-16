@@ -1,0 +1,41 @@
+{
+  "elements": {
+    "point": {
+      "bucket": "etc",
+      "fields": {
+        "title": {"type": "short-input"},
+        "body": {"type": "textarea"}
+      },
+      "function": "\\point{$title}{$body}"
+    },
+    "place": {
+      "bucket": "offers",
+      "fields": {
+        "title": {"type": "short-input"},
+        "year-group": {"type": "short-input"},
+        "body": {"type": "textarea"}
+      },
+      "function": "\\place{$title}{$year-group}{$body}"
+    }
+  },
+  "buckets": {
+    "etc": {
+      "begin": "",
+      "end": "",
+      "persistent": true,
+      "joiner": "\n"
+    },
+    "offers": {
+      "begin": "\\begin{offers}",
+      "end": "\\end{offers}",
+      "persistent": false,
+      "joiner": "\n"
+    }
+  },
+  "document": {
+    "template-source": "src/compile/template.tex",
+    "write-location": "src/compile/tmp.tex",
+    "compilation-command": "pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/compile src/compile/tmp.tex",
+    "document-location": "src/compile/tmp.pdf"
+  }
+}
