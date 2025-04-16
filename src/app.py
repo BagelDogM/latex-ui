@@ -25,7 +25,7 @@ def data():
     print(f'Received JSON: {json}')
     json = assign_element_properties(json)
     print(f'Edited JSON to: {json}')
-    complile_to_latex(json)
+    complile(json)
 
     # Compile the latex that compile_to_latex wrote,
     # setting the output directory to src/latex so that the log files do not clog the filesystem.

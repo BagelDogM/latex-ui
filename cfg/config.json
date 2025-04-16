@@ -33,9 +33,9 @@
     }
   },
   "document": {
-    "template-source": "src/latex/template.tex",
-    "write-location": "src/latex/tmp.tex",
-    "compilation-command": "pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/latex src/latex/tmp.tex",
-    "document-location": "src/latex/tmp.pdf"
+    "template-source": "src/compile/template.tex",
+    "write-location": "src/compile/tmp.tex",
+    "compilation-command": "pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/compile src/compile/tmp.tex",
+    "document-location": "src/compile/tmp.pdf"
   }
 }

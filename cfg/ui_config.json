@@ -1,0 +1,12 @@
+{
+  "input-types": {
+    "short-input": "<input class=\"short-input\" type=\"text\" id=\"ID\" placeholder=\"PLACEHOLDER\">",
+    "long-input": "<input class=\"long-input\" type=\"text\" id=\"ID\" placeholder=\"PLACEHOLDER\">",
+    "short-dropdown": "--",
+    "long-dropdown": "--",
+    "textarea": "<textarea class=\"textarea\" id=\"ID\"></textarea>"
+  },
+
+  "element-opener": "<form class=\"form-container\" id=\"IDENT\" data-eltype=\"NAME\"><p class=\"label\"><a href=\"#\" onclick=\"removeElement(IDENT)\">remove NAME</a></p>",
+  "element-closer": "</form>"
+}
