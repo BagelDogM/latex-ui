@@ -1,21 +1,39 @@
 {
-"elements": {
-  "point": {
-    "bucket": "-",
-    "fields": {
-      "title": {"type": "short-input"},
-      "body": {"type": "textarea"}
+  "elements": {
+    "point": {
+      "bucket": "etc",
+      "fields": {
+        "title": {"type": "short-input"},
+        "body": {"type": "textarea"}
+      },
+      "function": "\\point{$title}{$name}"
     },
-    "function": "\\point{$title}{$name}"
+    "place": {
+      "bucket": "offers",
+      "fields": {
+        "title": {"type": "short-input"},
+        "year-group": {"type": "short-input"},
+        "body": {"type": "textarea"}
+      },
+      "function": "\\place{$title}{$name}{$year-group}"
+    }
   },
-  "place": {
-    "bucket": "-",
-    "fields": {
-      "title": {"type": "short-input"},
-      "year-group": {"type": "short-input"},
-      "body": {"type": "textarea"}
+  "buckets": {
+    "etc": {
+      "begin": "",
+      "end": "",
+      "persistent": true
     },
-    "function": "\\place{$title}{$name}{$year-group}"
+    "offers": {
+      "begin": "\\begin{offers}",
+      "end": "\\end{offers}",
+      "persistent": false
+    }
+  },
+  "document": {
+    "template-source": "src/latex/template.tex",
+    "write-location": "src/latex/tmp.tex",
+    "compilation-command": "pdflatex -interaction=nonstopmode -shell-escape -output-directory=src/latex src/latex/tmp.tex",
+    "document-location": "src/latex/tmp.pdf"
   }
-}
 }

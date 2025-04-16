@@ -32,7 +32,7 @@ This file is read from by all other layers. It stores information for buckets, e
     }
   },
   "document": {
-    "premable-source": <source of preamble document which contains any extra text and the string formatting locations of buckets>,
+    "template-source": <source of preamble document which contains any template text and the string formatting locations of buckets>,
     "write-location": <file compilation layer should write to>
     "compilation-command": <command to compile the file, if necessary (e.g. for LaTeX),
     "document-source": <source where final document is found, if different from write-location>
@@ -63,7 +63,15 @@ Once the "Create PDF" button is presssed, this layer activates. It iterates thro
 This is then passed to the backend layer.
 
 ## Backend layer
-This layer handles all the logic of the program. It is responsible for adding the `bucket` attribute to all of the JSON elements, depending on their `type`. It can also change the data before compilation (e.g., sorting elements or escaping characters for different languages)
+This layer handles all the logic of the program. It is responsible for adding the `bucket` attribute to all of the JSON elements, depending on their `type`. It can also change the data before compilation (e.g., sorting elements or escaping characters for different languages.) The output of each element looks like:
+```json
+{
+  "type": etc
+  ...
+  "bucket": <appropriate bucket, from config>,
+  "function": <appropriate function, from config>
+}
+```
 
 ## Compilation layer
 ### Functions
