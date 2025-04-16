@@ -2,11 +2,14 @@ import subprocess, shlex, os
 from flask import Flask, render_template, request, send_file, Response
 from latex.latex_compiler import complile_to_latex
 
+from ui import build_elements
+element_names = build_elements()
+
 app = Flask(__name__)
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template('index.html', element_names=element_names)
 
 # Handles data uploads from the JS frontend
 @app.route("/data", methods=["POST"])

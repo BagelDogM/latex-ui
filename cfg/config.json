@@ -1,0 +1,21 @@
+{
+"elements": {
+  "point": {
+    "bucket": "-",
+    "fields": {
+      "title": {"type": "short-input"},
+      "body": {"type": "textarea"}
+    },
+    "function": "\\point{$title}{$name}"
+  },
+  "place": {
+    "bucket": "-",
+    "fields": {
+      "title": {"type": "short-input"},
+      "year-group": {"type": "short-input"},
+      "body": {"type": "textarea"}
+    },
+    "function": "\\place{$title}{$name}{$year-group}"
+  }
+}
+}

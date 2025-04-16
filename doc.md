@@ -17,7 +17,7 @@ This file is read from by all other layers. It stores information for buckets, e
       "bucket": <appropriate bucket>,
       "fields": {
         <id (that will be used in HTML and in compilation)>: {
-          "type": <short-input, long-input, dropdown-short, dropdown-long, textarea>,
+          "type": <short-input, long-input, short-dropdown, long-dropdown, textarea>,
           "options": <for dropdowns> ["a", "b", ...]
         }
       },
@@ -63,7 +63,7 @@ Once the "Create PDF" button is presssed, this layer activates. It iterates thro
 This is then passed to the backend layer.
 
 ## Backend layer
-This layer handles all the logic of the program. It is responsible for adding the `bucket` attribute to all of the JSON elements, depending on their `type`. It can also change the data before compilation (e.g., sorting elements)
+This layer handles all the logic of the program. It is responsible for adding the `bucket` attribute to all of the JSON elements, depending on their `type`. It can also change the data before compilation (e.g., sorting elements or escaping characters for different languages)
 
 ## Compilation layer
 ### Functions
