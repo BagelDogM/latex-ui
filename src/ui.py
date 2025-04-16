@@ -1,5 +1,6 @@
 import json
 import os
+from jinja2 import Environment, BaseLoader
 
 def build_elements():
     if not os.path.isdir('src/static/elements'):
@@ -11,13 +12,17 @@ def build_elements():
     # Populate elements/ directory
     names = []
     for name, props in config["elements"].items():
-        element_html = ui_config['element-opener'].replace("NAME", name) # Add opener e.g., opening tag of container
+        env = Environment(loader=BaseLoader()).from_string(ui_config['element-opener']) # for string replacement
+        element_html = env.render(name=name) # Add opener e.g., opening tag of container - string replacement via Jinja
+
         # Iterate through element fields and add HTML objects
         for field_name, field_props in props["fields"].items():
             type = field_props["type"]
-            element_html += ui_config['input-types'][type].replace("ID", field_name).replace("PLACEHOLDER", field_name.capitalize())
+            env = Environment(loader=BaseLoader()).from_string(ui_config['input-types'][type]) # for string replacement
+            element_html += env.render(name=field_name)
 
-        element_html += ui_config['element-closer'] # e.g., closing tag of container
+        env = Environment(loader=BaseLoader()).from_string(ui_config['element-closer']) # for string replacement
+        element_html += env.render(name=name) # e.g., closing tag of container
 
         # Write the HTMl to the correct file in elements/
         with open(f'src/static/elements/{name}.html', 'w') as file:

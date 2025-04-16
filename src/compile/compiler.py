@@ -1,24 +1,28 @@
 import json
+from jinja2 import Environment, BaseLoader, FileSystemLoader
+import jinja2
 
-def parse_string(string):
-    # Escape necessary characters and convert single linebreaks to \newline characters.
-    escape_characters = {
-        '\\': '\\textbackslash ',
-        '{': '\\{',
-        '}': '\\}',
-        '%': '\\%',
-        '\n': '\\newline ' # \n\n will already be used as intended.
-    }
-    for pattern, replacement in escape_characters.items():
-        string = string.replace(pattern, replacement)
+jinja_env_params = json.load(open("cfg/config.json"))["jinja"]
 
-    # Convert
-    return string
+# def parse_string(string):
+#     # Escape necessary characters and convert single linebreaks to \newline characters.
+#     escape_characters = {
+#         '\\': '\\textbackslash ',
+#         '{': '\\{',
+#         '}': '\\}',
+#         '%': '\\%',
+#         '\n': '\\newline ' # \n\n will already be used as intended.
+#     }
+#     for pattern, replacement in escape_characters.items():
+#         string = string.replace(pattern, replacement)
 
-def write_element(file_object, element):
-    # Escape all characters for each entry after the element type so they aren't compiled wrong - e.g. % starting a comment
-    escaped_values = map(parse_string, element['values'])
-    file_object.write(f'\\{element["type"]}'+'{'+'}{'.join(escaped_values)+'}\n')
+#     # Convert
+#     return string
+
+# def write_element(file_object, element):
+#     # Escape all characters for each entry after the element type so they aren't compiled wrong - e.g. % starting a comment
+#     escaped_values = map(parse_string, element['values'])
+#     file_object.write(f'\\{element["type"]}'+'{'+'}{'.join(escaped_values)+'}\n')
 
 def complile(data: list[dict]):
     """
@@ -26,30 +30,25 @@ def complile(data: list[dict]):
     written to latex/tmp.tex
     """
     config = json.load(open("cfg/config.json"))
-
-    write_location = config["document"]["write-location"]
-    # Create a copy of the template to write to in order to create the final latex
-    file_text = open(config["document"]["template-source"]).read()
+    write_location, template_source = config["document"]["write-location"], config["document"]["template-source"]
 
     buckets = {name: [] for name in config["buckets"].keys()} # Initialise empty buckets
 
     for element in data:
         # Format element values into its function parameter
-        formatted_function = element['function']
-        print(element['values'])
-        for name, value in element['values'].items():
-            # TODO: refactor to Jinja
-            print(name)
-            formatted_function = formatted_function.replace(f'${name}', str(value))
+        print(f'{element['values']=}')
+
+        func_env = Environment(loader=BaseLoader(), **jinja_env_params).from_string(element['compile-to'])
+        formatted_function = func_env.render(element['values']) # Do string replacement using element values
 
         # Add to appropriate bucket
         buckets[element['bucket']].append(formatted_function)
 
     for bucket_name, bucket_elements in buckets.items():
-        bconfig = config['buckets'][bucket_name]
+        bconfig = config['buckets'][bucket_name] # Get config for only THIS bucket
         text = ""
 
-        # Add begin and end values if values present or persistent
+        # Add begin and end values if values present or persistent (of course, persistent objects also with values will also get begin and end values)
         if bucket_elements or bconfig['persistent']: text += bconfig["begin"]
 
         # Add each element, joined by the joiner
@@ -57,9 +56,14 @@ def complile(data: list[dict]):
 
         if bucket_elements or bconfig['persistent']: text += bconfig["end"]
 
-        # Finally, once text is created, add to appropriate location in file.
-        file_text = file_text.replace(f'${bucket_name}', text)
+        buckets[bucket_name] = text
 
-    # Add final text of all buckets.
+    # Finally, place buckets into document using Jinja string formatting
+    bucket_env = Environment(loader=FileSystemLoader( searchpath="./" ), **jinja_env_params)
+    template = bucket_env.get_template(template_source)
+
+    # Render template and write to file of the same name (weird, I know but we want this as a file)
     with open(write_location, 'w') as file:
-        file.write(file_text)
+        file.write(template.render(buckets))
+
+
