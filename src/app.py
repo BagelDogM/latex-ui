@@ -25,29 +25,30 @@ def data():
     print(f'Received JSON: {json}')
     json = assign_element_properties(json)
     print(f'Edited JSON to: {json}')
-    complile(json)
 
-    # Compile the latex that compile_to_latex wrote,
-    # setting the output directory to src/latex so that the log files do not clog the filesystem.
-    p = subprocess.Popen(shlex.split(config['document']['compilation-command']))
+    complile(json) # Invoke compilation layer
 
-    while (code:=p.poll()) is None: # Wait until the process has finished
-        pass
+    # Compile the code that the compile() function wrote,
+    if (ccom := config['document'].get('compilation.command')):
+        p = subprocess.Popen(shlex.split(ccom))
 
-    if p.poll() == 0: # The program exited succesfully
-        return Response('Resouce created.', status=201) # Return that the resource was created.
+        while (code:=p.poll()) is None: # Wait until the process has finished
+            pass
+
+        if p.poll() == 0: # The program exited succesfully
+            return Response('Resouce created.', status=201) # No error, so successful creation
+        else:
+            return Response(f'File creation failed due to compilation error. Error code: {code}', status=400) # Otherwise, return that it failed (e.g., the input was blank)
     else:
-        return Response(f'PDF creation failed due to pdflatex error. Error code: {code}', status=400) # Otherwise, return that it failed (e.g., the input was blank)
-
+        return Response('Resouce created.', status=201)
 
 # Handles data download, requested by the frontend client.
 @app.route("/download")
 def download():
     if os.path.exists(document_location):
-        return send_file(document_location.replace('src/', ''))
+        return send_file(document_location.replace('src/', '')) # Remove src because this is in a different context.
     else:
-        return 'No PDF has been compiled yet.'
+        return 'No document has been compiled yet.'
 
 if __name__ == '__main__':
-    # TODO: cleanup files so /download doens't download old file
     app.run(port=8080)
