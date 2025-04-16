@@ -1,6 +1,5 @@
 import json
 from jinja2 import Environment, BaseLoader, FileSystemLoader
-import jinja2
 
 jinja_env_params = json.load(open("cfg/config.json"))["jinja"]
 
@@ -65,5 +64,3 @@ def complile(data: list[dict]):
     # Render template and write to file of the same name (weird, I know but we want this as a file)
     with open(write_location, 'w') as file:
         file.write(template.render(buckets))
-
-

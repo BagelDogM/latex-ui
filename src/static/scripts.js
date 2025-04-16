@@ -59,8 +59,10 @@ function postData() {
     var data = JSON.stringify(final_json);
     xhr.send(data);
 
-    previousContent = document.getElementById("create").textContent; // Save previous content in order to reset
+    tmpCreate = document.getElementById("create").textContent; // Save previous content in order to reset
     document.getElementById("create").textContent = "Loading...";
+    document.getElementById("download").classList.add("hidden"); // Hide download button during compilation - will not unhide if compilation fails.
+
 
     xhr.onload = () => {
       // Finally, add the "download PDF" button so that the user can download the result
@@ -72,7 +74,7 @@ function postData() {
         alert("Something went wrong. Please check all fields are filled and try again.");
       }
 
-      document.getElementById("create").textContent = previousContent; // reset content
+      document.getElementById("create").textContent = tmpCreate; // reset content
     }
   } else {
     alert("Your input is empty. Please enter something and try again.")
