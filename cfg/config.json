@@ -6,7 +6,7 @@
         "title": {"type": "short-input"},
         "body": {"type": "textarea"}
       },
-      "function": "\\point{$title}{$name}"
+      "function": "\\point{$title}{$body}"
     },
     "place": {
       "bucket": "offers",
@@ -15,19 +15,21 @@
         "year-group": {"type": "short-input"},
         "body": {"type": "textarea"}
       },
-      "function": "\\place{$title}{$name}{$year-group}"
+      "function": "\\place{$title}{$year-group}{$body}"
     }
   },
   "buckets": {
     "etc": {
       "begin": "",
       "end": "",
-      "persistent": true
+      "persistent": true,
+      "joiner": "\n"
     },
     "offers": {
       "begin": "\\begin{offers}",
       "end": "\\end{offers}",
-      "persistent": false
+      "persistent": false,
+      "joiner": "\n"
     }
   },
   "document": {

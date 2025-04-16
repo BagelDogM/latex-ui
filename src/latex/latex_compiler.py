@@ -1,4 +1,5 @@
 import shutil
+import json
 
 def parse_string(string):
     # Escape necessary characters and convert single linebreaks to \newline characters.
@@ -25,29 +26,41 @@ def complile_to_latex(data: list[dict]):
     Takes a list of elements (point, visits etc) and compiles them into correct latex code which is
     written to latex/tmp.tex
     """
+    config = json.load(open("cfg/config.json"))
+
+    write_location = config["document"]["write-location"]
     # Create a copy of the template to write to in order to create the final latex
-    shutil.copy('src/latex/template.tex', 'src/latex/tmp.tex')
+    file_text = open(config["document"]["template-source"]).read()
 
-    with open('src/latex/tmp.tex', 'a') as file:
-        # Add all trials, places and visits in order: visits, trials, places
-        types = ['visit', 'trial', 'place'] # Also the correct ordering
-        relevant_elements = [e for e in data if e['type'] in types]
+    buckets = {name: [] for name in config["buckets"].keys()} # Initialise empty buckets
 
-        print(f'{relevant_elements=}')
-        if relevant_elements != []: # If there are any visits, trials or places
-            file.write('\\begin{offers}\n')
+    for element in data:
+        # Format element values into its function parameter
+        formatted_function = element['function']
+        print(element['values'])
+        for name, value in element['values'].items():
+            # TODO: refactor to Jinja
+            print(name)
+            formatted_function = formatted_function.replace(f'${name}', str(value))
 
-            relevant_elements.sort(key=lambda e: types.index(e['type'])) # Sort in the order the 'types' list is in.
+        # Add to appropriate bucket
+        buckets[element['bucket']].append(formatted_function)
 
-            for element in relevant_elements:
-                write_element(file, element)
+    for bucket_name, bucket_elements in buckets.items():
+        bconfig = config['buckets'][bucket_name]
+        text = ""
 
-            file.write('\\end{offers}\n')
+        # Add begin and end values if values present or persistent
+        if bucket_elements or bconfig['persistent']: text += bconfig["begin"]
 
-        # Add all other points
-        relevant_elements = [e for e in data if e['type'] == 'point']
-        for element in relevant_elements:
-            write_element(file, element)
+        # Add each element, joined by the joiner
+        text += bconfig['joiner'].join(bucket_elements)
 
-        # End enumerate and document tags
-        file.write('\\end{enumerate}\n\\end{document}')
+        if bucket_elements or bconfig['persistent']: text += bconfig["end"]
+
+        # Finally, once text is created, add to appropriate location in file.
+        file_text = file_text.replace(f'${bucket_name}', text)
+
+    # Add final text of all buckets.
+    with open(write_location, 'w') as file:
+        file.write(file_text)

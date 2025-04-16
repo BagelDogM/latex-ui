@@ -28,7 +28,8 @@ This file is read from by all other layers. It stores information for buckets, e
     <bucket name>: {
       "begin": <text added at beginning of bucket>,
       "end": <text added at end of bucket>,
-      "persistent": <bool: if false, begin and end text disappears if the bucket is empty; if true, they remain>
+      "persistent": <bool: if false, begin and end text disappears if the bucket is empty; if true, they remain>,
+      "joiner": <what to join elements with, e.g. \n>
     }
   },
   "document": {
@@ -78,6 +79,6 @@ This layer handles all the logic of the program. It is responsible for adding th
 Each element in the passed JSON will be converted into the appropriate text using the `function` attribute. This attribute uses "$<fieldname>" syntax for string replacement. Then the functions are added to the appropriate buckets.
 
 ### Buckets
-Each function is prescribed a bucket by the Backenc layer via the "bucket" attribute in the config. The functions are added to their appropriate bucket in the order they are found (so sorting should be done in the backend.) Each bucket also has begin and end text that is added conditionally.
+Each function is prescribed a bucket by the Backenc layer via the "bucket" attribute in the config. The functions are added to their appropriate bucket in the order they are found  (so sorting should be done in the backend.) They are joined by `joiner`. Each bucket also has begin and end text that is added conditionally.
 
 Once each bucket has its content, they are then added to the document itself (write-location in the config.) Then, if `compilation-command` exists, it is run. The compilation layer then ends, prompting the backend to read the file at write-source, or document-source if it exists, and make this available to the frontend via the /download post request.
