@@ -5,4 +5,4 @@ Latex editor with a UI for use by non-technical editors, that compiles to regula
 > Backend: Python with Flask
 
 ### Usage
-In the project's directory, run `npx @tailwindcss/cli -i ./src/static/input.css -o ./src/static/output.css` and then `python3 src/app.py`. Access at `127.0.0.1:8080`.
+In the project's directory, run `python3 src/app.py` and access at `127.0.0.1:8080`.
